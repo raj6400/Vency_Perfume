@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfume Home Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        background-color: #f8f9fa;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      /* Navbar */
+      iframe {
+        width: 100%;
+        height: 80px;
+        border: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+
+      /* Video container */
+      .video-container {
+        position: relative;
+        margin-top: 80px;
+        width: 100%;
+        height: 90vh;
+        overflow: hidden;
+        background: black;
+      }
+      .video-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .video-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 54px;
+        height: 54px;
+        background: linear-gradient(135deg, #ffc107 60%, #ff9800 100%);
+        color: #212529;
+        border: none;
+        border-radius: 50%;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.9;
+      }
+      .video-nav-btn:hover {
+        background: #ff9800;
+        color: #fff;
+      }
+
+      .video-nav-btn-left {
+        left: 32px;
+      }
+      .video-nav-btn-right {
+        right: 32px;
+      }
+
+      /* Section spacing */
+      section {
+        padding: 80px 0;
+      }
+
+      /* Trending Perfumes */
+      .trending-section {
+        background: linear-gradient(135deg, #fff 0%, #fff8e1 100%);
+        border-radius: 30px;
+        padding: 3rem 2rem;
+        margin: 2rem auto;
+        box-shadow: 0 15px 35px rgba(255, 152, 0, 0.1);
+      }
+
+      .trending-item {
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .trending-img {
+        height: 300px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(255, 152, 0, 0.15);
+        transition: all 0.4s ease;
+        border: 3px solid rgba(255, 152, 0, 0.1);
+      }
+
+      .trending-img:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(255, 152, 0, 0.2);
+        border-color: rgba(255, 152, 0, 0.2);
+      }
+
+      .trending-title {
+        color: #ff9800;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .trending-price {
+        color: #795548;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+
+      .trending-carousel .carousel-control-prev,
+      .trending-carousel .carousel-control-next {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        border-radius: 50%;
+        opacity: 0.9;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .trending-carousel .carousel-control-prev {
+        left: -25px;
+      }
+
+      .trending-carousel .carousel-control-next {
+        right: -25px;
+      }
+
+      .trending-carousel .carousel-control-prev:hover,
+      .trending-carousel .carousel-control-next:hover {
+        opacity: 1;
+        background: linear-gradient(135deg, #ff9800 0%, #ff8f00 100%);
+      }
+
+      .trending-carousel .carousel-indicators {
+        bottom: -50px;
+      }
+
+      .trending-carousel .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 152, 0, 0.3);
+        border: none;
+        margin: 0 6px;
+        transition: all 0.3s ease;
+      }
+
+      .trending-carousel .carousel-indicators button.active {
+        background-color: #ff9800;
+        transform: scale(1.2);
+      }
+
+      /* Image + details */
+      .img-details img {
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      }
+      .img-details h2 {
+        font-weight: bold;
+        color: #ff9800;
+        margin-bottom: 1.5rem;
+      }
+      .signature-img {
+        border-radius: 20px !important;
+        box-shadow: 0 15px 35px rgba(255, 152, 0, 0.15) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .signature-img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 20px 40px rgba(255, 152, 0, 0.2) !important;
+      }
+
+      /* Luxury perfumes */
+      .luxury-img {
+        height: 280px;
+        object-fit: cover;
+        border-radius: 12px;
+        width: 100%;
+      }
+
+      .luxury-collection-img {
+        width: 100%;
+        border-radius: 25px !important;
+        box-shadow: 0 20px 40px rgba(255, 152, 0, 0.18) !important;
+        transition: all 0.4s ease;
+        border: 3px solid rgba(255, 152, 0, 0.1);
+      }
+
+      .luxury-collection-img:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(255, 152, 0, 0.25) !important;
+        border: 3px solid rgba(255, 152, 0, 0.2);
+      }
+
+      .luxury-details {
+        background: linear-gradient(135deg, #fff 0%, #fff8e1 100%);
+        padding: 2.5rem;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(255, 152, 0, 0.1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .luxury-details h2 {
+        color: #ff9800;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+      }
+
+      .luxury-details p {
+        color: #5d4037;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+      }
+
+      .luxury-details .features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 2rem 0;
+      }
+
+      .luxury-details .features li {
+        color: #795548;
+        font-size: 1.05rem;
+        margin-bottom: 0.8rem;
+        padding-left: 2rem;
+        position: relative;
+      }
+
+      .luxury-details .features li:before {
+        content: "✦";
+        color: #ffa726;
+        position: absolute;
+        left: 0;
+        font-size: 1.2rem;
+      }
+
+      .luxury-button {
+        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        color: #fff;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        align-self: flex-start;
+      }
+
+      .luxury-button:hover {
+        background: linear-gradient(135deg, #ff9800 0%, #ff8f00 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255, 152, 0, 0.2);
+      }
+
+      /* Gallery */
+      .gallery-section {
+        background: linear-gradient(135deg, #fff 0%, #fff8e1 100%);
+        border-radius: 30px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(255, 152, 0, 0.1);
+      }
+
+      .gallery-item {
+        position: relative;
+        margin-bottom: 30px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(255, 152, 0, 0.15);
+        transition: all 0.4s ease;
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(255, 152, 0, 0.2);
+      }
+
+      .gallery-img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+      }
+
+      .gallery-item:hover .gallery-img {
+        transform: scale(1.1);
+      }
+
+      .gallery-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        padding: 20px;
+        transform: translateY(100%);
+        transition: transform 0.4s ease;
+      }
+
+      .gallery-item:hover .gallery-overlay {
+        transform: translateY(0);
+      }
+
+      .gallery-title {
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .gallery-price {
+        color: #ffc107;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+
+      /* Reviews */
+      .review-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+      }
+      .review-card:hover {
+        transform: translateY(-8px);
+      }
+
+      /* Footer */
+      footer {
+        background: #212529;
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      .brand-marquee {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        background: linear-gradient(90deg, #fff 60%, #f7f3e9 100%);
+        padding: 40px 0;
+        border-radius: 18px;
+        box-shadow: 0 2px 12px rgba(255, 193, 7, 0.07);
+      }
+      .brand-track {
+        display: flex;
+        gap: 60px;
+        animation: scrollBrands 30s linear infinite;
+        width: max-content;
+        padding: 0 30px;
+      }
+      .brand-track:hover {
+        animation-play-state: paused;
+      }
+      .brand-track img {
+        height: 80px;
+        width: auto;
+        object-fit: contain;
+        filter: grayscale(100%);
+        opacity: 0.7;
+        transition: all 0.3s ease;
+      }
+      .brand-track img:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      .brand-content {
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        padding: 0 30px;
+        min-width: max-content;
+      }
+      @keyframes scrollBrands {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      @media (max-width: 768px) {
+        .brand-content {
+          gap: 40px;
+        }
+        .brand-track img {
+          height: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <iframe src="../components/navbar.html"></iframe>
+
+    <!-- Video Slider -->
+    <div class="video-container">
+      <video id="videoSlider" autoplay muted playsinline></video>
+      <button id="prevBtn" class="video-nav-btn video-nav-btn-left">
+        &lt;
+      </button>
+      <button id="nextBtn" class="video-nav-btn video-nav-btn-right">
+        &gt;
+      </button>
+    </div>
+
+    <!-- Image + Details Section -->
+    <section class="img-details container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <img
+            src="../images/Home/r1.webp"
+            alt="Signature Perfume"
+            class="signature-img"
+          />
+        </div>
+        <div class="col-md-6">
+          <h2>Discover Your Signature Scent</h2>
+          <p>
+            Indulge in timeless fragrances crafted with precision and elegance.
+            Each bottle tells a story, blending luxury and passion.
+          </p>
+          <button class="btn btn-dark px-4 py-2 mt-3">Shop Now</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Perfume Slider -->
+    <section class="bg-light">
+      <div class="container">
+        <div class="trending-section">
+          <h2
+            class="text-center mb-5"
+            style="color: #ff9800; font-weight: 700; font-size: 2rem"
+          >
+            Trending Perfumes
+          </h2>
+          <div
+            id="trendingCarousel"
+            class="carousel slide trending-carousel"
+            data-bs-ride="carousel"
+            data-bs-interval="3000"
+            data-bs-pause="false"
+          >
+            <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#trendingCarousel"
+                data-bs-slide-to="0"
+                class="active"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#trendingCarousel"
+                data-bs-slide-to="1"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#trendingCarousel"
+                data-bs-slide-to="2"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#trendingCarousel"
+                data-bs-slide-to="3"
+              ></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="trending-item">
+                      <img
+                        src="../images/Home/q1.jpg"
+                        class="trending-img d-block mx-auto"
+                        alt="Royal Oud"
+                      />
+                      <h3 class="trending-title">Royal Oud</h3>
+                      <p class="trending-price">$299.99</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="trending-item">
+                      <img
+                        src="../images/Home/q2.jpg"
+                        class="trending-img d-block mx-auto"
+                        alt="Velvet Rose"
+                      />
+                      <h3 class="trending-title">Velvet Rose</h3>
+                      <p class="trending-price">$279.99</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="trending-item">
+                      <img
+                        src="../images/Home/q3.jpg"
+                        class="trending-img d-block mx-auto"
+                        alt="Midnight Jasmine"
+                      />
+                      <h3 class="trending-title">Midnight Jasmine</h3>
+                      <p class="trending-price">$319.99</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="trending-item">
+                      <img
+                        src="../images/Home/q4.jpg"
+                        class="trending-img d-block mx-auto"
+                        alt="Golden Amber"
+                      />
+                      <h3 class="trending-title">Golden Amber</h3>
+                      <p class="trending-price">$289.99</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="trending-item">
+                      <img
+                        src="../images/Home/q5.jpg"
+                        class="trending-img d-block mx-auto"
+                        alt="Ocean Mist"
+                      />
+                      <h3 class="trending-title">Ocean Mist</h3>
+                      <p class="trending-price">$259.99</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="trending-item">
+                      <img
+                        src="../images/Home/q6.jpg"
+                        class="trending-img d-block mx-auto"
+                        alt="Wild Vanilla"
+                      />
+                      <h3 class="trending-title">Wild Vanilla</h3>
+                      <p class="trending-price">$269.99</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="trending-item">
+                      <img
+                        src="../images/Home/q7.jpg"
+                        class="trending-img d-block mx-auto"
+                        alt="Mystic Wood"
+                      />
+                      <h3 class="trending-title">Mystic Wood</h3>
+                      <p class="trending-price">$329.99</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#trendingCarousel"
+              data-bs-slide="prev"
+            >
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#trendingCarousel"
+              data-bs-slide="next"
+            >
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Another Image + Details Section -->
+    <section class="img-details container">
+      <div class="row align-items-center flex-md-row-reverse">
+        <div class="col-md-6">
+          <img
+            src="../images/Home/k1.webp"
+            alt="Luxury Perfume Collection"
+            class="luxury-collection-img"
+          />
+        </div>
+        <div class="col-md-6">
+          <div class="luxury-details">
+            <h2>Luxury Collection</h2>
+            <p>
+              Immerse yourself in our exclusive collection of handcrafted
+              fragrances. Each perfume is a masterpiece, blending the rarest
+              ingredients with artisanal craftsmanship to create an
+              unforgettable olfactory experience.
+            </p>
+            <ul class="features">
+              <li>Rare and precious natural ingredients</li>
+              <li>Handcrafted in limited quantities</li>
+              <li>Unique collector's edition bottles</li>
+              <li>Extended longevity formulation</li>
+              <li>Exclusive boutique selections</li>
+            </ul>
+            <button class="luxury-button">Explore Luxury</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Luxury Brand Marquee -->
+    <section class="bg-light">
+      <div class="container">
+        <h2
+          class="text-center mb-5"
+          style="color: #ff9800; font-weight: 700; font-size: 2rem"
+        >
+          Luxury Brands
+        </h2>
+        <div class="brand-marquee">
+          <div class="brand-track">
+            <div class="brand-content">
+              <img src="../images/Home/l1.jpg" alt="Luxury Brand 1" />
+              <img src="../images/Home/l2.png" alt="Luxury Brand 2" />
+              <img src="../images/Home/l3.png" alt="Luxury Brand 3" />
+              <img src="../images/Home/l4.png" alt="Luxury Brand 4" />
+              <img src="../images/Home/l5.png" alt="Luxury Brand 5" />
+              <img src="../images/Home/l6.png" alt="Luxury Brand 6" />
+              <img src="../images/Home/l7.png" alt="Luxury Brand 7" />
+            </div>
+            <!-- Duplicate for seamless loop -->
+            <div class="brand-content">
+              <img src="../images/Home/l1.jpg" alt="Luxury Brand 1" />
+              <img src="../images/Home/l2.png" alt="Luxury Brand 2" />
+              <img src="../images/Home/l3.png" alt="Luxury Brand 3" />
+              <img src="../images/Home/l4.png" alt="Luxury Brand 4" />
+              <img src="../images/Home/l5.png" alt="Luxury Brand 5" />
+              <img src="../images/Home/l6.png" alt="Luxury Brand 6" />
+              <img src="../images/Home/l7.png" alt="Luxury Brand 7" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Perfume Gallery -->
+    <section>
+      <div class="container">
+        <h2
+          class="text-center mb-5"
+          style="color: #ff9800; font-weight: 700; font-size: 2rem"
+        >
+          Used For Perfume
+        </h2>
+        <div class="gallery-section">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e1.jpg"
+                  class="gallery-img"
+                  alt="Ethereal Dreams"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Ethereal Dreams</h3>
+                  <p class="gallery-price">$329.99</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e2.webp"
+                  class="gallery-img"
+                  alt="Royal Essence"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Royal Essence</h3>
+                  <p class="gallery-price">$349.99</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e3.jpg"
+                  class="gallery-img"
+                  alt="Midnight Rose"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Midnight Rose</h3>
+                  <p class="gallery-price">$289.99</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e4.jpg"
+                  class="gallery-img"
+                  alt="Golden Mirage"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Golden Mirage</h3>
+                  <p class="gallery-price">$309.99</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e5.jpg"
+                  class="gallery-img"
+                  alt="Velvet Noir"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Velvet Noir</h3>
+                  <p class="gallery-price">$339.99</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e6.jpg"
+                  class="gallery-img"
+                  alt="Crystal Bloom"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Crystal Bloom</h3>
+                  <p class="gallery-price">$299.99</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e7.jpg"
+                  class="gallery-img"
+                  alt="Azure Dreams"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Azure Dreams</h3>
+                  <p class="gallery-price">$319.99</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="gallery-item">
+                <img
+                  src="../images/Home/e8.jpg"
+                  class="gallery-img"
+                  alt="Amber Twilight"
+                />
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">Amber Twilight</h3>
+                  <p class="gallery-price">$359.99</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Reviews -->
+    <section class="bg-light">
+      <div class="container">
+        <h2 class="text-center mb-5">Customer Reviews</h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="review-card">
+              <p>
+                "Absolutely mesmerizing fragrance. I get compliments every time
+                I wear it!"
+              </p>
+              <h6>- Laxmi</h6>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="review-card">
+              <p>"Luxury at its finest. Worth every penny."</p>
+              <h6>- Nensi</h6>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="review-card">
+              <p>
+                "A scent that lasts all day. Highly recommend to all perfume
+                lovers."
+              </p>
+              <h6>- Rutva</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+   
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Video Slider Script -->
+    <script>
+      const videos = [
+        "../Video/video1.mp4",
+        "../Video/video2.mp4",
+        "../Video/video3.mp4",
+        "../Video/video4.webm",
+        "../Video/video5.webm",
+        "../Video/video6.webm",
+      ];
+
+      let currentIndex = 0;
+      const videoElement = document.getElementById("videoSlider");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+
+      function playVideo(index) {
+        videoElement.src = videos[index];
+        videoElement.load();
+        videoElement.play();
+      }
+
+      videoElement.addEventListener("ended", () => {
+        currentIndex = (currentIndex + 1) % videos.length;
+        playVideo(currentIndex);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % videos.length;
+        playVideo(currentIndex);
+      });
+
+      prevBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + videos.length) % videos.length;
+        playVideo(currentIndex);
+      });
+
+      playVideo(currentIndex);
+    </script>
+  </body>
+  
+</html>

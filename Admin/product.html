@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product - Admin (Static)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/admin-theme.css" />
+    <style>
+      /* --- GLOBAL STYLES & VARIABLES --- */
+      :root {
+        --accent: #7c4dff;
+        --accent2: #e1bee7;
+        --muted: #5e4a6e;
+        --glass-blur: 18px;
+        --shadow: 0 8px 32px 0 rgba(60, 30, 90, 0.1);
+        --text: #2d223a;
+        --card-bg: rgba(
+          255,
+          255,
+          255,
+          0.95
+        ); /* Slightly opaque white for contrast */
+        --body-gradient-start: #f8f6fa;
+        --body-gradient-end: #e1bee7;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Playfair Display", "Montserrat", Arial, sans-serif;
+        background: linear-gradient(
+          120deg,
+          var(--body-gradient-start) 0%,
+          var(--body-gradient-end) 100%
+        );
+        color: var(--text);
+      }
+
+      /* --- FIXED SIDEBAR IMPLEMENTATION (Added for better admin view) --- */
+      .admin-wrap {
+        display: flex;
+      }
+      .sidebar-container {
+        width: 260px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+      }
+      .iframe-sidebar {
+        width: 100%;
+        height: 100vh;
+        border: none;
+      }
+      .main {
+        flex: 1;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-left: 260px; /* Offset for fixed sidebar */
+      }
+
+      /* --- UI ELEMENTS --- */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0;
+      }
+
+      .card-surface {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        border: 1px solid var(--accent2);
+        box-shadow: var(--shadow);
+      }
+      .form-label {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      /* Static Form Styling */
+      .form-control.bg-transparent.border-0 {
+        border-color: #f3e7fa !important;
+        border-width: 0 0 1px 0 !important;
+        border-radius: 0;
+        padding-left: 0;
+      }
+
+      .product-preview {
+        width: 72px;
+        height: 72px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: var(--muted);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        display: inline-block;
+      }
+      .table td,
+      .table th {
+        vertical-align: middle;
+        color: var(--text);
+        font-size: 0.9rem;
+      }
+
+      /* Hide Actions column in static list */
+      .table th:last-child,
+      .table td:last-child {
+        display: none;
+      }
+
+      /* --- Validation (red box) to match login/brand --- */
+      .field-error {
+        border-color: #e53935 !important;
+        background: #ffebee !important;
+      }
+      .error-text {
+        color: #c62828;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        display: none;
+      }
+      .error-text.show {
+        display: block;
+      }
+
+      @media (max-width: 900px) {
+        .sidebar-container {
+          display: none;
+        }
+        .main {
+          padding: 18px;
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-wrap">
+      <div class="sidebar-container">
+        <iframe
+          src="../components/admin-sidebar.html"
+          class="iframe-sidebar"
+        ></iframe>
+      </div>
+
+      <main class="main">
+        <div class="topbar">
+          <div>
+            <h3 class="page-title">Product Management (Static)</h3>
+            <div style="color: var(--muted); font-size: 0.92rem">
+              This page displays a **static, read-only** list of demo products.
+              The form below is non-functional.
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <small id="adminEmail"></small>
+          </div>
+        </div>
+
+        <div class="card-surface">
+          <h5 class="mb-4" style="color: var(--accent); font-weight: 700">
+            Product Entry Form (Static Display)
+          </h5>
+          <form
+            id="productForm"
+            class="row g-3"
+            onsubmit="return false;"
+            novalidate
+          >
+            <input type="hidden" id="productId" />
+            <div class="col-md-6">
+              <label class="form-label">Product Name</label>
+              <input
+                id="productName"
+                class="form-control bg-transparent border-0"
+                placeholder="e.g. Luxury Perfume"
+              />
+              <div class="error-text" id="productNameError"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Slug (URL)</label>
+              <input
+                id="productSlug"
+                class="form-control bg-transparent border-0"
+                placeholder="luxury-perfume"
+              />
+              <div class="error-text" id="productSlugError"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Price</label>
+              <input
+                id="productPrice"
+                type="number"
+                class="form-control bg-transparent border-0"
+                placeholder="1000"
+              />
+              <div class="error-text" id="productPriceError"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Quantity</label>
+              <input
+                id="productQty"
+                type="number"
+                class="form-control bg-transparent border-0"
+                placeholder="50"
+              />
+              <div class="error-text" id="productQtyError"></div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Brand</label>
+              <input
+                id="productBrand"
+                class="form-control bg-transparent border-0"
+                placeholder="e.g. Vency"
+              />
+              <div class="error-text" id="productBrandError"></div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea
+                id="productDesc"
+                rows="2"
+                class="form-control bg-transparent border-0"
+                placeholder="A short description for the product"
+              ></textarea>
+              <div class="error-text" id="productDescError"></div>
+            </div>
+            <div class="col-md-4 d-flex align-items-center gap-3">
+              <div>
+                <label class="form-label d-block">Image</label>
+                <img
+                  id="imagePreview"
+                  class="product-preview"
+                  src="../images/Logo.png"
+                  alt="product preview"
+                />
+              </div>
+              <div class="flex-fill">
+                <label class="form-label">Upload</label>
+                <input
+                  id="productImage"
+                  type="file"
+                  accept="image/*"
+                  class="form-control form-control-sm"
+                />
+                <div class="form-text" style="color: var(--muted)">
+                  PNG/JPG up to a few MB.
+                </div>
+              </div>
+            </div>
+            <div class="col-12 d-flex gap-2 align-items-center pt-3">
+              <button
+                id="productAddBtn"
+                class="btn btn-sm btn-primary"
+                type="submit"
+              >
+                <i class="bi bi-plus-circle"></i> Add Product
+              </button>
+              <button class="btn btn-sm btn-secondary" type="button" disabled>
+                <i class="bi bi-x-octagon"></i> Static Mode
+              </button>
+              <button
+                class="btn btn-sm btn-outline-light"
+                type="button"
+                disabled
+              >
+                <i class="bi bi-arrow-counterclockwise"></i> Reset
+              </button>
+              <button
+                class="btn btn-sm btn-danger ms-auto"
+                type="button"
+                disabled
+              >
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card-surface">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0" style="color: var(--accent)">
+              Static Product List
+            </h6>
+            <div style="color: var(--muted); font-size: 0.92rem">
+              Total: <span id="totalProducts">0</span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle table-borderless mb-0">
+              <thead>
+                <tr style="color: var(--muted)">
+                  <th style="width: 80px">Image</th>
+                  <th>Name</th>
+                  <th>Slug</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                  <th>Brand</th>
+                  <th>Description</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productList"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Auth guard (Simplified for demo)
+      (function () {
+        // ... (standard auth guard logic kept simple)
+        try {
+          const token = localStorage.getItem("vency_admin_token");
+          const data = JSON.parse(atob(token));
+          if (data && data.email)
+            document.getElementById("adminEmail").textContent = data.email;
+        } catch (e) {
+          document.getElementById("adminEmail").textContent = "admin@demo.com";
+        }
+      })();
+
+      // --- STATIC PRODUCT LIST GENERATOR (No CRUD logic) ---
+      (function () {
+        const listEl = document.getElementById("productList");
+        const totalEl = document.getElementById("totalProducts");
+
+        // **STATIC PRODUCT DATA**
+        const staticProducts = [
+          {
+            name: "Vency Royale Oud",
+            slug: "vency-royale-oud",
+            desc: "A powerful, long-lasting oud and saffron blend.",
+            price: "15000",
+            qty: "20",
+            brand: "Vency",
+            image: "../images/product-oud.jpg", // Placeholder image path
+          },
+          {
+            name: "Creed Aventus Clone",
+            slug: "creed-aventus-clone",
+            desc: "Pineapple, smoke, and birch for the modern gentleman.",
+            price: "12000",
+            qty: "15",
+            brand: "Creed",
+            image: "../images/product-aventus.jpg",
+          },
+          {
+            name: "Tom Ford Black Orchid",
+            slug: "tom-ford-black-orchid",
+            desc: "Dark, spicy, and opulent floral-gourmand fragrance.",
+            price: "9500",
+            qty: "35",
+            brand: "Tom Ford Private Blend",
+            image: "../images/product-orchid.jpg",
+          },
+          {
+            name: "MFK Baccarat Rouge 540",
+            slug: "mfk-baccarat-rouge-540",
+            desc: "Amber, floral, and woody notes, a cult favorite.",
+            price: "18000",
+            qty: "10",
+            brand: "Maison Francis Kurkdjian",
+            image: "../images/product-rouge.jpg",
+          },
+          {
+            name: "Amouage Interlude Man",
+            slug: "amouage-interlude-man",
+            desc: "The 'Blue Beast'—a chaotic but masterful smoky incense scent.",
+            price: "14500",
+            qty: "8",
+            brand: "Amouage",
+            image: "../images/product-interlude.jpg",
+          },
+        ];
+
+        function escapeHtml(s) {
+          if (!s) return "";
+          return String(s).replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              }[c])
+          );
+        }
+
+        // user-added products
+        window.userProducts = window.userProducts || [];
+
+        function renderList() {
+          listEl.innerHTML = "";
+          const combined = staticProducts.concat(window.userProducts || []);
+          combined.forEach((p) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td><img src="${
+                p.image || "../images/Logo.png"
+              }" class="product-preview" alt="${escapeHtml(p.name)}" /></td>
+              <td><strong>${escapeHtml(p.name)}</strong></td>
+              <td>${escapeHtml(p.slug || "")}</td>
+              <td>₹${escapeHtml(p.price || "0")}</td>
+              <td>${escapeHtml(p.qty || "0")}</td>
+              <td>${escapeHtml(p.brand || "-")}</td>
+              <td>${escapeHtml(p.desc || "")}</td>
+              <td class="text-end"></td> `;
+            listEl.appendChild(tr);
+          });
+          totalEl.textContent = combined.length;
+        }
+
+        // Render the static list on load
+        renderList();
+        window.renderProductList = renderList;
+
+        // Clear form inputs on page load for a clean appearance
+        document.getElementById("productForm").reset();
+        document.getElementById("imagePreview").src = "../images/Logo.png";
+      })();
+
+      function validateProductForm() {
+        var name = document.getElementById("productName").value.trim();
+        var slug = document.getElementById("productSlug").value.trim();
+        var price = document.getElementById("productPrice").value.trim();
+        var qty = document.getElementById("productQty").value.trim();
+        var brand = document.getElementById("productBrand").value.trim();
+        var desc = document.getElementById("productDesc").value.trim();
+        document.getElementById("productNameError").innerHTML = "";
+        document.getElementById("productSlugError").innerHTML = "";
+        document.getElementById("productPriceError").innerHTML = "";
+        document.getElementById("productQtyError").innerHTML = "";
+        document.getElementById("productBrandError").innerHTML = "";
+        document.getElementById("productDescError").innerHTML = "";
+        document.getElementById("productNameError").classList.remove("show");
+        document.getElementById("productSlugError").classList.remove("show");
+        document.getElementById("productPriceError").classList.remove("show");
+        document.getElementById("productQtyError").classList.remove("show");
+        document.getElementById("productBrandError").classList.remove("show");
+        document.getElementById("productDescError").classList.remove("show");
+        document.getElementById("productName").classList.remove("field-error");
+        document.getElementById("productSlug").classList.remove("field-error");
+        document.getElementById("productPrice").classList.remove("field-error");
+        document.getElementById("productQty").classList.remove("field-error");
+        document.getElementById("productBrand").classList.remove("field-error");
+        document.getElementById("productDesc").classList.remove("field-error");
+        if (name === "") {
+          document.getElementById("productNameError").innerHTML =
+            "Please enter product name";
+          document.getElementById("productNameError").classList.add("show");
+          document.getElementById("productName").classList.add("field-error");
+          return false;
+        }
+        if (slug === "") {
+          document.getElementById("productSlugError").innerHTML =
+            "Please enter slug";
+          document.getElementById("productSlugError").classList.add("show");
+          document.getElementById("productSlug").classList.add("field-error");
+          return false;
+        }
+        var slugFormat = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+        if (!slugFormat.test(slug)) {
+          document.getElementById("productSlugError").innerHTML =
+            "Use lowercase letters, numbers and hyphens only";
+          document.getElementById("productSlugError").classList.add("show");
+          document.getElementById("productSlug").classList.add("field-error");
+          return false;
+        }
+        if (price === "" || isNaN(price) || parseFloat(price) <= 0) {
+          document.getElementById("productPriceError").innerHTML =
+            "Please enter a valid price greater than 0";
+          document.getElementById("productPriceError").classList.add("show");
+          document.getElementById("productPrice").classList.add("field-error");
+          return false;
+        }
+        if (qty === "" || isNaN(qty) || parseInt(qty) < 0) {
+          document.getElementById("productQtyError").innerHTML =
+            "Please enter a valid quantity (0 or more)";
+          document.getElementById("productQtyError").classList.add("show");
+          document.getElementById("productQty").classList.add("field-error");
+          return false;
+        }
+        if (brand === "") {
+          document.getElementById("productBrandError").innerHTML =
+            "Please enter brand";
+          document.getElementById("productBrandError").classList.add("show");
+          document.getElementById("productBrand").classList.add("field-error");
+          return false;
+        }
+        if (desc !== "" && desc.length < 5) {
+          document.getElementById("productDescError").innerHTML =
+            "Description must be at least 5 characters";
+          document.getElementById("productDescError").classList.add("show");
+          document.getElementById("productDesc").classList.add("field-error");
+          return false;
+        }
+        return true;
+      }
+
+      // Clear errors on input
+      [
+        "productName",
+        "productSlug",
+        "productPrice",
+        "productQty",
+        "productBrand",
+        "productDesc",
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const errEl = document.getElementById(id + "Error");
+        const evt = el.tagName === "TEXTAREA" ? "input" : "input";
+        el.addEventListener(evt, () => {
+          el.classList.remove("field-error");
+          errEl.innerHTML = "";
+          errEl.classList.remove("show");
+        });
+        el.addEventListener("blur", validateProductForm);
+      });
+
+      // File preview
+      let selectedProductImageUrl = "";
+      const productImageInput = document.getElementById("productImage");
+      const productImagePreview = document.getElementById("imagePreview");
+      if (productImageInput) {
+        productImageInput.addEventListener("change", (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const url = URL.createObjectURL(file);
+          selectedProductImageUrl = url;
+          if (productImagePreview) productImagePreview.src = url;
+        });
+      }
+
+      // Handle Add Product submit
+      document
+        .getElementById("productForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!validateProductForm()) return;
+          const name = document.getElementById("productName").value.trim();
+          const slug = document.getElementById("productSlug").value.trim();
+          const desc = document.getElementById("productDesc").value.trim();
+          const price = document.getElementById("productPrice").value.trim();
+          const qty = document.getElementById("productQty").value.trim();
+          const brand = document.getElementById("productBrand").value.trim();
+          window.userProducts.push({
+            name,
+            slug,
+            desc,
+            price,
+            qty,
+            brand,
+            image: selectedProductImageUrl || "../images/Logo.png",
+          });
+          if (typeof window.renderProductList === "function")
+            window.renderProductList();
+          // Reset
+          this.reset();
+          selectedProductImageUrl = "";
+          if (productImagePreview)
+            productImagePreview.src = "../images/Logo.png";
+        });
+    </script>
+  </body>
+</html>

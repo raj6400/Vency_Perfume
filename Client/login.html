@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login & Register | MySite</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", Arial, sans-serif;
+        background: url("../images/login.jpg") center/cover no-repeat;
+        overflow: hidden;
+      }
+      /* --- Validation (red box) --- */
+      .field-error {
+        border-color: #e53935 !important;
+        background: #ffebee !important;
+      }
+      .error-text {
+        color: #c62828;
+        font-size: 0.8rem;
+        margin: -8px 0 10px 2px;
+        display: none;
+      }
+      .error-text.show {
+        display: block;
+      }
+      #emailError,
+      #passwordError,
+      #firstErr,
+      #lastErr,
+      #emailErr,
+      #passErr,
+      #cpassErr,
+      #termsErr {
+        color: #c62828;
+        font-size: 0.8rem;
+        margin: -8px 0 10px 2px;
+      }
+      .auth-container {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
+        padding: 40px 30px;
+        width: 850px;
+        max-width: 95%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 1;
+        animation: fadeIn 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .auth-container h2 {
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #212529;
+      }
+      form {
+        width: 100%;
+      }
+      form label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 6px;
+        display: block;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 14px;
+        border-radius: 7px;
+        border: 1.5px solid #cfd8dc;
+        font-size: 0.95rem;
+        background: #f7fafc;
+        transition: border 0.2s, background 0.2s;
+      }
+      input:focus,
+      select:focus {
+        border: 1.5px solid #00bcd4;
+        background: #fff;
+      }
+      .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 18px 0 12px 0;
+      }
+      .divider span {
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+        margin: 0 10px;
+      }
+      .divider label {
+        color: #888;
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin: 0;
+      }
+      .social-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-radius: 7px;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 10px 0;
+        border: none;
+        cursor: pointer;
+        transition: box-shadow 0.2s, background 0.2s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .social-btn.google {
+        background: #fff;
+        color: #444;
+        border: 1.5px solid #e0e0e0;
+      }
+      .social-btn.google i {
+        color: #db4437;
+      }
+      .social-btn.google:hover {
+        box-shadow: 0 4px 16px #db443733;
+      }
+      .social-btn.facebook {
+        background: #1877f2;
+        color: #fff;
+        border: none;
+      }
+      .social-btn.facebook i {
+        color: #fff;
+      }
+      .social-btn.facebook:hover {
+        background: #145db2;
+      }
+      .social-btn.apple {
+        background: #000;
+        color: #fff;
+        border: none;
+      }
+      .social-btn.apple i {
+        color: #fff;
+      }
+      .social-btn.apple:hover {
+        background: #222;
+      }
+      button[type="submit"] {
+        width: 100%;
+        background: linear-gradient(90deg, #00bcd4 60%, #0097a7 100%);
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        padding: 12px 0;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+      button[type="submit"]:hover {
+        background: linear-gradient(90deg, #0097a7 60%, #00bcd4 100%);
+        box-shadow: 0 4px 14px rgba(0, 188, 212, 0.15);
+      }
+      .toggle-link {
+        text-align: center;
+        margin-top: 14px;
+        color: #0097a7;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .icon {
+        font-size: 2.4rem;
+        color: #00bcd4;
+        margin-bottom: 8px;
+      }
+
+      /* Two column register form */
+      .register-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px 24px;
+      }
+      .register-grid .full {
+        grid-column: span 2;
+      }
+      /* Register form perfect size and center */
+      #registerForm {
+        max-width: 700px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .auth-container {
+          width: 95%;
+          padding: 25px 8px;
+        }
+        .register-grid {
+          grid-template-columns: 1fr;
+        }
+        .register-grid .full {
+          grid-column: span 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      src="../components/navbar.html"
+      style="
+        width: 100%;
+        height: 70px;
+        border: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      "
+    ></iframe>
+    <div style="height: 70px"></div>
+    <div class="auth-container">
+      <h2 id="formTitle">Login</h2>
+
+      <!-- Login -->
+      <form id="loginForm" novalidate>
+        <div class="social-btns">
+          <button type="button" class="social-btn google">
+            <i class="fab fa-google"></i>Continue with Google
+          </button>
+          <button type="button" class="social-btn apple">
+            <i class="fab fa-apple"></i>Continue with Apple
+          </button>
+        </div>
+        <div class="divider"><span></span><label>or</label><span></span></div>
+        <label for="loginGmail">Gmail</label>
+        <input
+          type="email"
+          id="loginGmail"
+          placeholder="Enter Gmail"
+          required
+        />
+        <div id="emailError"></div>
+        <label for="loginPassword">Password</label>
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Enter Password"
+          required
+        />
+        <div id="passwordError"></div>
+        <button type="submit">Login</button>
+      </form>
+
+      <!-- Register -->
+      <form id="registerForm" style="display: none" novalidate>
+        <div class="social-btns">
+          <button type="button" class="social-btn google">
+            <i class="fab fa-google"></i>Continue with Google
+          </button>
+          <button type="button" class="social-btn apple">
+            <i class="fab fa-apple"></i>Continue with Apple
+          </button>
+        </div>
+        <div class="divider"><span></span><label>or</label><span></span></div>
+        <div class="register-grid">
+          <div>
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" required />
+            <div id="firstErr"></div>
+          </div>
+          <div>
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" required />
+            <div id="lastErr"></div>
+          </div>
+          <div class="full">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" required />
+            <div id="emailErr"></div>
+          </div>
+          <div>
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" required />
+            <div id="passErr"></div>
+          </div>
+          <div>
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" required />
+            <div id="cpassErr"></div>
+          </div>
+          <div class="full">
+            <label>
+              <input type="checkbox" id="terms" required />
+              I accept the terms and privacy policy
+            </label>
+            <div id="termsErr"></div>
+          </div>
+        </div>
+        <button type="submit">Register</button>
+      </form>
+
+      <div class="toggle-link" id="toggleLink">
+        Don’t have an account? Register
+      </div>
+    </div>
+
+    <script src="client.js"></script>
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+      const toggleLink = document.getElementById("toggleLink");
+      const formTitle = document.getElementById("formTitle");
+      let isLogin = true;
+
+      toggleLink.addEventListener("click", () => {
+        isLogin = !isLogin;
+        loginForm.style.display = isLogin ? "" : "none";
+        registerForm.style.display = isLogin ? "none" : "";
+        formTitle.textContent = isLogin ? "Login" : "Register";
+        toggleLink.textContent = isLogin
+          ? "Don’t have an account? Register"
+          : "Already have an account? Login";
+      });
+
+      // Handle login (including admin shortcut)
+      const ADMIN_EMAIL = "rajpatel6872@gmail.com";
+      const ADMIN_PW = "admin123";
+
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!validateLogin()) {
+          return;
+        }
+        const email = document.getElementById("loginGmail").value.trim();
+        const pw = document.getElementById("loginPassword").value;
+        // If admin credentials entered, create admin token and redirect to admin panel
+        if (email === ADMIN_EMAIL && pw === ADMIN_PW) {
+          const token = btoa(JSON.stringify({ email, t: Date.now() }));
+          const expires = Date.now() + 60 * 60 * 1000; // 1 hour
+          localStorage.setItem("vency_admin_token", token);
+          localStorage.setItem("vency_admin_token_expires", expires);
+          window.location.href = "../Admin/index.html";
+          return;
+        }
+        // Non-admin login (existing behavior) - replace with your auth logic
+        alert("Login Submitted");
+      });
+      registerForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!validateRegister()) {
+          return;
+        }
+        alert("Register Submitted");
+      });
+
+      // Populate country dropdown
+      const countries = [
+        "India",
+        "USA",
+        "UK",
+        "Australia",
+        "Canada",
+        "Germany",
+        "France",
+      ];
+      const countrySelect = document.getElementById("registerCountry");
+      countries.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c;
+        opt.textContent = c;
+        countrySelect.appendChild(opt);
+      });
+    </script>
+  </body>
+</html>

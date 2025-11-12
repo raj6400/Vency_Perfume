@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Settings - Admin (Static)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* --- GLOBAL STYLES & VARIABLES (Refined) --- */
+      :root {
+        --accent: #7c4dff;
+        --accent2: #e1bee7;
+        --muted: #5e4a6e;
+        --shadow: 0 8px 32px 0 rgba(60, 30, 90, 0.1);
+        --text: #2d223a;
+        --card-bg: rgba(255, 255, 255, 0.95); /* Slightly opaque white for contrast */
+        --body-gradient-start: #f8f6fa;
+        --body-gradient-end: #e1bee7;
+      }
+      body {
+        margin: 0;
+        font-family: "Playfair Display", "Montserrat", Arial, sans-serif;
+        background: linear-gradient(
+          120deg,
+          var(--body-gradient-start) 0%,
+          var(--body-gradient-end) 100%
+        );
+        color: var(--text);
+      }
+      
+      /* --- FIXED SIDEBAR IMPLEMENTATION --- */
+      .admin-wrap {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar-container {
+        width: 260px;
+        position: fixed; /* Keep the sidebar locked */
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+      }
+      .iframe-sidebar {
+        width: 100%;
+        height: 100vh;
+        border: none;
+      }
+      .main {
+        flex: 1;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-left: 260px; /* Offset for fixed sidebar */
+      }
+      
+      /* --- UI ELEMENTS --- */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0;
+      }
+      .card-surface {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px; /* Increased padding for consistency */
+        border: 1px solid var(--accent2);
+        box-shadow: var(--shadow);
+      }
+      
+      /* Form Label and Disabled Input Styling */
+      .form-label {
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .form-control.disabled-input {
+        background: #f8f6fa !important;
+        pointer-events: none;
+        border: 1px solid #e1bee7 !important; /* Make it look intentional */
+      }
+      
+      .color-box {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        display: inline-block;
+        margin-left: 8px;
+        flex-shrink: 0; /* Prevents shrinking on smaller screens */
+      }
+      .settings-section {
+          padding-bottom: 20px;
+          margin-bottom: 20px;
+          border-bottom: 1px solid var(--accent2);
+      }
+      .settings-section:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+      }
+
+      /* Validation styles (same as other pages) */
+      .field-error { border-color: #e53935 !important; background: #ffebee !important; }
+      .error-text { color: #c62828; font-size: 0.8rem; margin-top: 4px; display: none; }
+      .error-text.show { display: block; }
+
+      @media (max-width: 900px) {
+        .sidebar-container {
+          display: none;
+        }
+        .main {
+          padding: 18px;
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-wrap">
+      <div class="sidebar-container">
+        <iframe
+          src="../components/admin-sidebar.html"
+          class="iframe-sidebar"
+        ></iframe>
+      </div>
+
+      <main class="main">
+        <div class="topbar">
+          <div>
+            <h3 class="page-title">Website Settings (Static)</h3>
+            <div style="color: var(--muted); font-size: 0.92rem">
+              This is a static view of website configuration. **Changes cannot
+              be saved.**
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <small id="adminEmail">admin@demo.com</small>
+          </div>
+        </div>
+
+        <div class="card-surface">
+          <form id="settingsForm" onsubmit="return false;" novalidate>
+            <div class="settings-section">
+              <h5 class="mb-4" style="color: var(--accent); font-weight: 700">
+                General Settings
+              </h5>
+              <div class="row g-3 mt-1">
+                <div class="col-md-6">
+                  <label class="form-label">Website Title</label>
+                  <input
+                    id="settingsTitle"
+                    class="form-control disabled-input"
+                    value="Venue Vibe – Online Apple Store"
+                    readonly
+                  />
+                  <div class="error-text" id="settingsTitleError"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Logo</label>
+                  <input
+                    id="settingsLogo"
+                    class="form-control disabled-input"
+                    value="logo.png"
+                    readonly
+                  />
+                  <div class="error-text" id="settingsLogoError"></div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Description</label>
+                  <textarea id="settingsDesc" class="form-control disabled-input" rows="2" readonly>
+Premium Apple product store with exclusive offers and seamless shopping experience.
+                  </textarea>
+                  <div class="error-text" id="settingsDescError"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Contact Email</label>
+                  <input
+                    id="settingsEmail"
+                    class="form-control disabled-input"
+                    value="support@venuevibe.com"
+                    readonly
+                  />
+                  <div class="error-text" id="settingsEmailError"></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Contact Phone</label>
+                  <input
+                    id="settingsPhone"
+                    class="form-control disabled-input"
+                    value="+91 98765 43210"
+                    readonly
+                  />
+                  <div class="error-text" id="settingsPhoneError"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h5 class="mb-4" style="color: var(--accent); font-weight: 700">
+                Theme Settings
+              </h5>
+              <div class="row g-3 mt-1">
+                <div class="col-md-4">
+                  <label class="form-label">Primary Color</label>
+                  <div class="d-flex align-items-center">
+                    <input
+                      id="settingsPrimary"
+                      class="form-control disabled-input"
+                      value="#7c4dff"
+                      readonly
+                    />
+                    <span class="color-box" style="background: #7c4dff"></span>
+                  </div>
+                  <div class="error-text" id="settingsPrimaryError"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Navbar Color</label>
+                  <div class="d-flex align-items-center">
+                    <input
+                      id="settingsNavbar"
+                      class="form-control disabled-input"
+                      value="#2d223a"
+                      readonly
+                    />
+                    <span class="color-box" style="background: #2d223a"></span>
+                  </div>
+                  <div class="error-text" id="settingsNavbarError"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Footer Color</label>
+                  <div class="d-flex align-items-center">
+                    <input
+                      id="settingsFooter"
+                      class="form-control disabled-input"
+                      value="#5e4a6e"
+                      readonly
+                    />
+                    <span class="color-box" style="background: #5e4a6e"></span>
+                  </div>
+                  <div class="error-text" id="settingsFooterError"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h5 class="mb-4" style="color: var(--accent); font-weight: 700">
+                Font Settings
+              </h5>
+              <div class="row g-3 mt-1">
+                <div class="col-md-4">
+                  <label class="form-label">Font Family</label>
+                  <input
+                    id="settingsFontFamily"
+                    class="form-control disabled-input"
+                    value="Playfair Display"
+                    readonly
+                  />
+                  <div class="error-text" id="settingsFontFamilyError"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Font Size</label>
+                  <input
+                    id="settingsFontSize"
+                    class="form-control disabled-input"
+                    value="16px"
+                    readonly
+                  />
+                  <div class="error-text" id="settingsFontSizeError"></div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Font Color</label>
+                  <div class="d-flex align-items-center">
+                    <input
+                      id="settingsFontColor"
+                      class="form-control disabled-input"
+                      value="#2d223a"
+                      readonly
+                    />
+                    <span class="color-box" style="background: #2d223a"></span>
+                  </div>
+                  <div class="error-text" id="settingsFontColorError"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-12 d-flex gap-2 align-items-center pt-3">
+              <button class="btn btn-sm btn-secondary" type="button" disabled>
+                <i class="bi bi-x-octagon"></i> Static Mode
+              </button>
+              <button class="btn btn-sm btn-primary ms-auto" type="button" disabled>
+                <i class="bi bi-floppy"></i> Save Changes
+              </button>
+              <button class="btn btn-sm btn-outline-light" type="button" disabled>
+                <i class="bi bi-arrow-counterclockwise"></i> Reset
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  <script>
+    // Validation helpers (same pattern as other pages)
+    function setFieldError(inputEl, msg, msgEl) {
+      if (!inputEl) return;
+      inputEl.classList.add('field-error');
+      if (msgEl) { msgEl.textContent = msg || ''; if (msg) msgEl.classList.add('show'); else msgEl.classList.remove('show'); }
+    }
+    function clearFieldError(inputEl, msgEl) {
+      if (!inputEl) return;
+      inputEl.classList.remove('field-error');
+      if (msgEl) { msgEl.textContent = ''; msgEl.classList.remove('show'); }
+    }
+    function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v||'').trim()); }
+    function isPhone(v){ return /^[+]?\d[\d\s-]{7,15}$/.test((v||'').trim()); }
+    function isHex(v){ return /^#?[0-9a-fA-F]{6}$/.test((v||'').trim()); }
+    function isPx(v){ return /^(\d+)(px)?$/.test((v||'').trim()); }
+
+    function validateSettings(){
+      const title = document.getElementById('settingsTitle');
+      const logo = document.getElementById('settingsLogo');
+      const desc = document.getElementById('settingsDesc');
+      const email = document.getElementById('settingsEmail');
+      const phone = document.getElementById('settingsPhone');
+      const primary = document.getElementById('settingsPrimary');
+      const navbar = document.getElementById('settingsNavbar');
+      const footer = document.getElementById('settingsFooter');
+      const fontFamily = document.getElementById('settingsFontFamily');
+      const fontSize = document.getElementById('settingsFontSize');
+      const fontColor = document.getElementById('settingsFontColor');
+      const errs = {
+        title: document.getElementById('settingsTitleError'),
+        logo: document.getElementById('settingsLogoError'),
+        desc: document.getElementById('settingsDescError'),
+        email: document.getElementById('settingsEmailError'),
+        phone: document.getElementById('settingsPhoneError'),
+        primary: document.getElementById('settingsPrimaryError'),
+        navbar: document.getElementById('settingsNavbarError'),
+        footer: document.getElementById('settingsFooterError'),
+        fontFamily: document.getElementById('settingsFontFamilyError'),
+        fontSize: document.getElementById('settingsFontSizeError'),
+        fontColor: document.getElementById('settingsFontColorError'),
+      };
+      let ok = true;
+      if (!title.value.trim()) { setFieldError(title, 'Website title is required', errs.title); ok = false; } else { clearFieldError(title, errs.title); }
+      if (!logo.value.trim()) { setFieldError(logo, 'Logo is required', errs.logo); ok = false; } else { clearFieldError(logo, errs.logo); }
+      if (!desc.value.trim()) { setFieldError(desc, 'Description is required', errs.desc); ok = false; } else { clearFieldError(desc, errs.desc); }
+      if (!email.value.trim()) { setFieldError(email, 'Email is required', errs.email); ok = false; }
+      else if (!isEmail(email.value.trim())) { setFieldError(email, 'Enter valid email', errs.email); ok = false; } else { clearFieldError(email, errs.email); }
+      if (!phone.value.trim()) { setFieldError(phone, 'Phone is required', errs.phone); ok = false; }
+      else if (!isPhone(phone.value.trim())) { setFieldError(phone, 'Enter valid phone', errs.phone); ok = false; } else { clearFieldError(phone, errs.phone); }
+      const normHex = (v) => v.trim().startsWith('#') ? v.trim() : ('#' + v.trim());
+      if (!isHex(primary.value)) { setFieldError(primary, 'Enter 6-digit hex', errs.primary); ok = false; } else { primary.value = normHex(primary.value); clearFieldError(primary, errs.primary); }
+      if (!isHex(navbar.value)) { setFieldError(navbar, 'Enter 6-digit hex', errs.navbar); ok = false; } else { navbar.value = normHex(navbar.value); clearFieldError(navbar, errs.navbar); }
+      if (!isHex(footer.value)) { setFieldError(footer, 'Enter 6-digit hex', errs.footer); ok = false; } else { footer.value = normHex(footer.value); clearFieldError(footer, errs.footer); }
+      if (!fontFamily.value.trim()) { setFieldError(fontFamily, 'Font family is required', errs.fontFamily); ok = false; } else { clearFieldError(fontFamily, errs.fontFamily); }
+      if (!fontSize.value.trim()) { setFieldError(fontSize, 'Font size is required', errs.fontSize); ok = false; }
+      else if (!isPx(fontSize.value.trim())) { setFieldError(fontSize, 'Enter size like 16 or 16px', errs.fontSize); ok = false; } else { clearFieldError(fontSize, errs.fontSize); }
+      if (!isHex(fontColor.value)) { setFieldError(fontColor, 'Enter 6-digit hex', errs.fontColor); ok = false; } else { fontColor.value = normHex(fontColor.value); clearFieldError(fontColor, errs.fontColor); }
+      return ok;
+    }
+
+    // Attach listeners (still readonly UI, validation runs visually)
+    (function(){
+      const ids = ['settingsTitle','settingsLogo','settingsDesc','settingsEmail','settingsPhone','settingsPrimary','settingsNavbar','settingsFooter','settingsFontFamily','settingsFontSize','settingsFontColor'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        const errEl = document.getElementById(id+'Error');
+        if (!el) return;
+        const evt = el.tagName === 'TEXTAREA' ? 'input' : 'input';
+        el.addEventListener(evt, () => clearFieldError(el, errEl));
+        el.addEventListener('blur', validateSettings);
+      });
+      // Initial validation pass
+      validateSettings();
+    })();
+  </script>
+  </body>
+</html>

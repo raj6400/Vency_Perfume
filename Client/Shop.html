@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop - Vency Perfume</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&display=swap");
+
+      :root {
+        --primary: #b89772;
+        --primary-light: #d4b595;
+        --primary-dark: #96735c;
+        --secondary: #1a237e;
+        --secondary-light: #534bae;
+        --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2eafc 100%);
+        --card-gradient: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        --hero-gradient: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          #fffbe6 100%
+        );
+      }
+
+      body {
+        font-family: "Montserrat", Arial, sans-serif;
+        background: var(--bg-gradient);
+        color: #222;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Playfair Display", serif;
+      }
+      .shop-hero {
+        background: var(--hero-gradient);
+        padding: 100px 0 60px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .shop-hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("../images/Home/r1.webp") center/cover;
+        opacity: 0.1;
+        z-index: 1;
+      }
+
+      .shop-hero-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      .shop-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: var(--secondary);
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .shop-hero p {
+        font-size: 1.3rem;
+        color: #6d4c1b;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Filter Section */
+      .filter-section {
+        background: white;
+        padding: 20px 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 80px;
+        z-index: 100;
+        transition: all 0.3s ease;
+      }
+
+      .filter-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .filter-btn {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid var(--primary);
+        border-radius: 25px;
+        padding: 8px 20px;
+        width: 300px;
+      }
+
+      .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        padding-right: 10px;
+      }
+
+      .search-box i {
+        color: var(--primary);
+      }
+
+      .product-section {
+        padding: 60px 0;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        padding: 0 30px;
+      }
+
+      .product-card {
+        background: var(--card-gradient);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+      }
+
+      .product-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      .product-img-container {
+        position: relative;
+        padding-top: 125%;
+        overflow: hidden;
+      }
+
+      .product-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.5s ease;
+      }
+
+      .product-card:hover .product-img {
+        transform: scale(1.1);
+      }
+
+      .product-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: var(--primary);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        z-index: 1;
+      }
+
+      .product-content {
+        padding: 25px;
+      }
+
+      .product-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 10px;
+        font-family: "Playfair Display", serif;
+      }
+
+      .product-brand {
+        color: var(--primary);
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .product-desc {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        min-height: 48px;
+      }
+
+      .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .product-price {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
+
+      .add-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .add-btn:hover {
+        background: var(--secondary);
+        transform: translateX(5px);
+      }
+
+      .quick-view {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        z-index: 1;
+      }
+
+      .product-card:hover .quick-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .quick-view:hover {
+        background: var(--primary);
+        color: white;
+      }
+      /* Responsive Design */
+      @media (max-width: 1200px) {
+        .shop-hero h1 {
+          font-size: 3rem;
+        }
+        .product-grid {
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .shop-hero {
+          padding: 80px 0 40px;
+        }
+        .shop-hero h1 {
+          font-size: 2.5rem;
+        }
+        .product-grid {
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          padding: 0 20px;
+        }
+        .filter-section {
+          padding: 15px 0;
+        }
+        .search-box {
+          width: 100%;
+          max-width: 300px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .shop-hero h1 {
+          font-size: 2rem;
+        }
+        .shop-hero p {
+          font-size: 1.1rem;
+        }
+        .product-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+      }
+
+      .loading::after {
+        content: "";
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--primary);
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: loading 0.8s linear infinite;
+      }
+
+      @keyframes loading {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      src="../components/navbar.html"
+      style="
+        width: 100%;
+        height: 80px;
+        border: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      "
+    ></iframe>
+    <div style="height: 80px"></div>
+
+    <section class="shop-hero">
+      <div class="shop-hero-content">
+        <h1>Discover Luxury Fragrances</h1>
+        <p>
+          Explore our curated collection of premium perfumes, where each scent
+          tells a unique story of elegance and sophistication.
+        </p>
+      </div>
+    </section>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="filter-container">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Floral</button>
+        <button class="filter-btn">Woody</button>
+        <button class="filter-btn">Oriental</button>
+        <button class="filter-btn">Fresh</button>
+        <div class="search-box">
+          <input type="text" placeholder="Search perfumes..." />
+          <i class="bi bi-search"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Grid Section -->
+    <div class="product-section">
+      <div class="product-grid" id="product-grid">
+        <!-- Products will be injected by JS -->
+      </div>
+    </div>
+
+    <footer
+      style="
+        background: #1a237e;
+        color: #fff;
+        text-align: center;
+        padding: 24px 0 12px 0;
+        margin-top: 32px;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+      "
+    >
+      &copy; 2025 Vency Perfume Co. All rights reserved.
+    </footer>
+
+    <script>
+      // Product data with enhanced details
+      const products = [];
+      const brands = [
+        "Chanel",
+        "Dior",
+        "Creed",
+        "Tom Ford",
+        "Guerlain",
+        "Maison FK",
+      ];
+      const categories = ["Floral", "Woody", "Oriental", "Fresh"];
+      const descriptions = [
+        "An enchanting blend of rare florals and precious woods.",
+        "A sophisticated fusion of exotic spices and amber.",
+        "Fresh citrus notes combined with deep musk undertones.",
+        "Delicate rose essence wrapped in warm vanilla.",
+        "Magnetic combination of jasmine and sandalwood.",
+        "Intense oud fragrance with subtle floral hints.",
+        "Captivating mix of bergamot and oriental spices.",
+        "Pure elegance with iris and white musk notes.",
+        "Bold statement of leather and rare aromatics.",
+        "Timeless classic with lavender and amber base.",
+      ];
+
+      // Create products with enhanced details
+      for (let i = 1; i <= 30; i++) {
+        const basePrice = 199 + (i % 7) * 50; // Premium pricing
+        const discountedPrice = Math.floor(basePrice * 0.9);
+
+        products.push({
+          id: i,
+          title: `Vency ${getRandomName()} ${i}`,
+          brand: brands[i % 6],
+          category: categories[i % 4],
+          desc: descriptions[i % 10],
+          price: basePrice.toFixed(2),
+          discountedPrice: discountedPrice.toFixed(2),
+          img: `../images/Shop/${49 + i}.${getImageExt(49 + i)}`,
+          isNew: i % 5 === 0,
+          rating: 4 + (i % 2) * 0.5,
+        });
+      }
+
+      // Helper functions
+      function getRandomName() {
+        const prefixes = [
+          "Royal",
+          "Luxe",
+          "Elite",
+          "Pure",
+          "Gold",
+          "Black",
+          "Diamond",
+        ];
+        const suffixes = [
+          "Noir",
+          "Essence",
+          "Luminous",
+          "Prestige",
+          "Imperial",
+        ];
+        return (
+          prefixes[Math.floor(Math.random() * prefixes.length)] +
+          " " +
+          suffixes[Math.floor(Math.random() * suffixes.length)]
+        );
+      }
+
+      function getImageExt(num) {
+        const extMap = {
+          50: "webp",
+          51: "jpg",
+          52: "jpg",
+          53: "jpg",
+          54: "jpg",
+          55: "jpg",
+          56: "jpg",
+          57: "jpg",
+          58: "jpg",
+          59: "webp",
+          60: "jpg",
+          61: "jpg",
+          62: "jpg",
+          63: "jpg",
+          64: "jpg",
+          65: "jpg",
+          66: "jpg",
+          67: "jpg",
+          68: "jpg",
+          69: "jpg",
+          70: "jpg",
+          71: "jpg",
+          72: "jpg",
+          73: "jpg",
+          74: "jpg",
+          75: "jpg",
+          76: "jpg",
+          77: "jpg",
+          78: "webp",
+          79: "jpg",
+        };
+        return extMap[num] || "jpg";
+      }
+
+      // Render products with enhanced presentation
+      const grid = document.getElementById("product-grid");
+      products.forEach((p) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.dataset.category = p.category.toLowerCase();
+        card.innerHTML = `
+          <div class="product-img-container">
+            ${p.isNew ? '<span class="product-badge">New Arrival</span>' : ""}
+            <img src="${p.img}" alt="${p.title}" class="product-img" />
+            <button class="quick-view" title="Quick View">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <h3 class="product-title">${p.title}</h3>
+            <div class="product-brand">${p.brand}</div>
+            <div class="product-desc">${p.desc}</div>
+            <div class="product-footer">
+              <div class="product-price">
+                ${
+                  p.discountedPrice !== p.price
+                    ? `<span style="text-decoration: line-through; color: #999; font-size: 0.9rem; margin-right: 8px;">$${p.price}</span>`
+                    : ""
+                }
+                $${p.discountedPrice}
+              </div>
+              <button class="add-btn">
+                <i class="bi bi-cart-plus"></i>
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Filter functionality
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          filterBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          const category = btn.textContent.toLowerCase();
+          const cards = document.querySelectorAll(".product-card");
+
+          cards.forEach((card) => {
+            if (category === "all" || card.dataset.category === category) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+
+      // Search functionality
+      const searchInput = document.querySelector(".search-box input");
+      searchInput.addEventListener("input", (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll(".product-card");
+
+        cards.forEach((card) => {
+          const title = card
+            .querySelector(".product-title")
+            .textContent.toLowerCase();
+          const brand = card
+            .querySelector(".product-brand")
+            .textContent.toLowerCase();
+          const desc = card
+            .querySelector(".product-desc")
+            .textContent.toLowerCase();
+
+          if (
+            title.includes(searchTerm) ||
+            brand.includes(searchTerm) ||
+            desc.includes(searchTerm)
+          ) {
+            card.style.display = "";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      });
+
+      // Sticky filter section behavior
+      let lastScroll = 0;
+      window.addEventListener("scroll", () => {
+        const filterSection = document.querySelector(".filter-section");
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > lastScroll && currentScroll > 200) {
+          filterSection.style.transform = "translateY(-100%)";
+        } else {
+          filterSection.style.transform = "translateY(0)";
+        }
+        lastScroll = currentScroll;
+      });
+    </script>
+    <iframe
+      src="../components/footer.html"
+      style="width: 100%; height: 320px; border: none"
+      loading="lazy"
+    ></iframe>
+  </body>
+</html>

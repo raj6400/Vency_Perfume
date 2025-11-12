@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Orders - Admin (Static)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* --- GLOBAL STYLES & VARIABLES (Refined) --- */
+      :root {
+        --accent: #7c4dff;
+        --accent-dark: #6a41e5;
+        --accent2: #e1bee7;
+        --muted: #5e4a6e;
+        --shadow: 0 8px 32px 0 rgba(60, 30, 90, 0.1);
+        --text: #2d223a;
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --body-gradient-start: #f8f6fa;
+        --body-gradient-end: #e1bee7;
+
+        --status-pending: #ff9800;
+        --status-shipped: #2196f3;
+        --status-delivered: #4caf50;
+      }
+      body {
+        margin: 0;
+        font-family: "Playfair Display", "Montserrat", Arial, sans-serif;
+        background: linear-gradient(
+          120deg,
+          var(--body-gradient-start) 0%,
+          var(--body-gradient-end) 100%
+        );
+        color: var(--text);
+      }
+      
+      /* --- FIXED SIDEBAR IMPLEMENTATION --- */
+      .admin-wrap {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar-container {
+        width: 260px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+      }
+      .iframe-sidebar {
+        width: 100%;
+        height: 100vh;
+        border: none;
+      }
+      .main {
+        flex: 1;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-left: 260px; /* Offset for fixed sidebar */
+      }
+      
+      /* --- UI ELEMENTS --- */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: 0;
+      }
+      .card-surface {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        border: 1px solid var(--accent2);
+        box-shadow: var(--shadow);
+      }
+      .search-bar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .search-bar .form-control, .search-bar .form-select {
+        border-radius: 8px;
+        border: 1px solid #e1bee7;
+      }
+      .table th {
+        background: var(--accent2);
+        color: var(--text);
+        border-bottom: 2px solid var(--accent);
+      }
+      .table td {
+        vertical-align: middle;
+        font-size: 0.95rem;
+      }
+
+      /* --- BADGE STYLING --- */
+      .badge-custom {
+          padding: 0.35em 0.65em;
+          border-radius: 0.5rem;
+          font-weight: 500;
+          font-size: 0.8em;
+          color: white;
+      }
+      .badge-status-pending {
+        background: var(--status-pending);
+      }
+      .badge-status-shipped {
+        background: var(--status-shipped);
+      }
+      .badge-status-delivered {
+        background: var(--status-delivered);
+      }
+      
+      /* --- BUTTONS --- */
+      .btn-action {
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+      .btn-action:hover {
+        color: var(--accent);
+      }
+      .btn-action.view {
+        color: #7c4dff;
+      }
+      .btn-action.reply {
+        color: #4caf50;
+      }
+      .btn-action.delete {
+        color: #d32f2f;
+      }
+      .btn-action:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      @media (max-width: 900px) {
+        .sidebar-container {
+          display: none;
+        }
+        .main {
+          padding: 18px;
+          margin-left: 0;
+        }
+        .search-bar {
+            flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-wrap">
+      <!-- Sidebar Container (Fixed) -->
+      <div class="sidebar-container">
+        <iframe
+          src="../components/admin-sidebar.html"
+          class="iframe-sidebar"
+        ></iframe>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Topbar -->
+        <div class="topbar">
+          <div>
+            <h3 class="page-title">Orders (Static)</h3>
+            <div style="color: var(--muted); font-size: 0.92rem">
+              This page displays a static list of customer orders.
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <small id="adminEmail">admin@demo.com</small>
+          </div>
+        </div>
+
+        <!-- Orders List -->
+        <div class="card-surface">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="mb-0" style="color: var(--accent); font-weight: 700">
+              Customer Orders
+            </h6>
+            <div style="color: var(--muted); font-size: 0.92rem">
+              Total: <span id="totalOrders">0</span>
+            </div>
+          </div>
+          
+          <!-- Search & Filters (Non-functional for this static demo) -->
+          <div class="search-bar mb-4">
+            <input type="text" class="form-control" placeholder="Search order..." disabled />
+            <select class="form-select" disabled>
+              <option>Status</option>
+              <option>Pending</option>
+              <option>Shipped</option>
+              <option>Delivered</option>
+            </select>
+            <select class="form-select" disabled>
+              <option>Total</option>
+              <option>$0-$50</option>
+              <option>$51-$100</option>
+              <option>$100+</option>
+            </select>
+          </div>
+
+          <!-- Table -->
+          <div class="table-responsive">
+            <table class="table align-middle table-hover table-borderless mb-0">
+              <thead>
+                <tr style="color: var(--muted)">
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Total</th>
+                  <th style="width: 200px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="orderList">
+                <!-- Static rows inserted by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // --- STATIC ORDER LIST GENERATOR (No CRUD logic) ---
+      (function () {
+        const listEl = document.getElementById("orderList");
+        const totalEl = document.getElementById("totalOrders");
+
+        // **STATIC ORDER DATA (15 Orders)**
+        const staticOrders = [
+            { orderId: "#1001", customer: "Raj", status: "pending", date: "24-Sep-2025", total: 120 },
+            { orderId: "#1002", customer: "Anjali", status: "shipped", date: "22-Sep-2025", total: 85 },
+            { orderId: "#1003", customer: "Rohan", status: "delivered", date: "20-Sep-2025", total: 230 },
+            { orderId: "#1004", customer: "Priya", status: "pending", date: "24-Sep-2025", total: 65 },
+            { orderId: "#1005", customer: "Vikram", status: "shipped", date: "23-Sep-2025", total: 95 },
+            { orderId: "#1006", customer: "Sunita", status: "delivered", date: "21-Sep-2025", total: 150 },
+            { orderId: "#1007", customer: "Deepak", status: "pending", date: "22-Sep-2025", total: 45 },
+            { orderId: "#1008", customer: "Neha", status: "shipped", date: "19-Sep-2025", total: 210 },
+            { orderId: "#1009", customer: "Karan", status: "delivered", date: "18-Sep-2025", total: 110 },
+            { orderId: "#1010", customer: "Aisha", status: "pending", date: "25-Sep-2025", total: 55 },
+            { orderId: "#1011", customer: "Amit", status: "shipped", date: "17-Sep-2025", total: 175 },
+            { orderId: "#1012", customer: "Kavita", status: "delivered", date: "16-Sep-2025", total: 70 },
+            { orderId: "#1013", customer: "Rahul", status: "pending", date: "25-Sep-2025", total: 135 },
+            { orderId: "#1014", customer: "Geeta", status: "shipped", date: "15-Sep-2025", total: 90 },
+            { orderId: "#1015", customer: "Suresh", status: "delivered", date: "14-Sep-2025", total: 190 },
+        ];
+
+        function renderList() {
+            listEl.innerHTML = "";
+            staticOrders.forEach((o) => {
+                const tr = document.createElement("tr");
+                const statusBadgeClass = `badge-status-${o.status}`;
+                
+                tr.innerHTML = `
+                    <td>${o.orderId}</td>
+                    <td>${o.customer}</td>
+                    <td><span class="badge badge-custom ${statusBadgeClass}">${o.status.toUpperCase()}</span></td>
+                    <td>${o.date}</td>
+                    <td>$${o.total}</td>
+                    <td class="d-flex gap-1">
+                        <button class="btn-action" disabled><i class="bi bi-eye"></i> View</button>
+                        <button class="btn-action" disabled><i class="bi bi-box-seam"></i> Ship</button>
+                    </td>
+                `;
+                listEl.appendChild(tr);
+            });
+            totalEl.textContent = staticOrders.length;
+        }
+
+        // Render the static list on load
+        renderList();
+      })();
+    </script>
+  </body>
+</html>

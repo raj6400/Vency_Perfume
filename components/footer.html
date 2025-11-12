@@ -1,0 +1,156 @@
+<footer class="vency-footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <img src="../images/Logo.png" alt="Vency Perfume Logo" class="footer-logo" />
+      <h3>Vency Perfume Co.</h3>
+      <p>Exquisite fragrances for every moment.<br />
+      Crafted with passion since 2020.</p>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p><i class="bi bi-person"></i> Vency Perfume Team</p>
+      <p><i class="bi bi-telephone"></i> +91 98765 43210</p>
+      <p><i class="bi bi-envelope"></i> info@vencyperfume.com</p>
+    </div>
+    <div class="footer-links">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Shop.html">Shop</a></li>
+        <li><a href="About.html">About</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="login.html">Login/Register</a></li>
+        <li><a href="Proflie.html">Profile</a></li>
+        <li><a href="Content.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-social">
+      <h4>Follow Us</h4>
+      <div class="footer-social-icons">
+        <a href="#" title="Instagram"><i class="bi bi-instagram"></i></a>
+        <a href="#" title="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" title="Twitter"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" title="YouTube"><i class="bi bi-youtube"></i></a>
+        <a href="#" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2025 Vency Perfume Co. All rights reserved.
+  </div>
+</footer>
+
+<style>
+.vency-footer {
+  background: linear-gradient(120deg, #1a237e 0%, #b89772 100%);
+  color: #fffbe6;
+  padding: 0;
+  margin-top: 48px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  box-shadow: 0 -4px 24px #1a237e22;
+}
+.footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2.5rem;
+  padding: 36px 8vw 18px 8vw;
+}
+.footer-brand {
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+.footer-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px #b8977211;
+}
+.footer-brand h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #ffe9b0;
+}
+.footer-brand p {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #fffbe6;
+}
+.footer-contact, .footer-links, .footer-social {
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+.footer-contact h4, .footer-links h4, .footer-social h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #ffe9b0;
+}
+.footer-contact p, .footer-links ul, .footer-social-icons {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+}
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+.footer-links ul li {
+  margin-bottom: 6px;
+}
+.footer-links ul li a {
+  color: #fffbe6;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+.footer-links ul li a:hover {
+  color: #b89772;
+  text-decoration: underline;
+}
+.footer-social-icons {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+}
+.footer-social-icons a {
+  color: #fffbe6;
+  font-size: 1.35rem;
+  background: #b89772;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: 0 2px 8px #1a237e22;
+}
+.footer-social-icons a:hover {
+  background: #fffbe6;
+  color: #1a237e;
+  transform: scale(1.12);
+}
+.footer-bottom {
+  text-align: center;
+  padding: 12px 0 10px 0;
+  background: #181c2a;
+  color: #ffe9b0;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+@media (max-width: 900px) {
+  .footer-main {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 28px 4vw 12px 4vw;
+  }
+  .footer-brand, .footer-contact, .footer-links, .footer-social {
+    min-width: 0;
+    width: 100%;
+  }
+}
+</style>

@@ -1,0 +1,56 @@
+/* Shared admin theme for Vency (navy + gold luxury) */
+:root {
+  --accent: #7c9eff;
+  --accent2: rgba(124, 158, 255, 0.08);
+  --muted: #bfc9ff;
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-blur: 10px;
+  --shadow: 0 12px 40px rgba(8, 18, 40, 0.28);
+  --gold: #e6c07b;
+  --text: #eaf1ff;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --sidebar-bg: linear-gradient(180deg, #071027 0%, #0f274a 60%, #12326b 100%);
+  --body-bg: linear-gradient(180deg, #071027 0%, #0f274a 60%, #1b3a70 100%);
+  --sidebar-width: 260px;
+  --sidebar-collapsed: 72px;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Playfair Display", "Montserrat", Arial, sans-serif;
+  background: var(--body-bg);
+  color: var(--text);
+}
+
+/* Cards and surfaces */
+.card-surface,
+.bg-white {
+  background: var(--card-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  color: var(--text) !important;
+}
+.card-surface .fw-bold,
+.bg-white .fw-bold {
+  color: var(--text) !important;
+}
+
+/* Utility: topbar title color */
+.topbar h3 {
+  color: var(--accent);
+}
+
+/* Sidebar defaults (can be further customized in sidebar file) */
+.admin-sidebar {
+  background: var(--sidebar-bg);
+  color: var(--text);
+}
+
+/* Small helper to increase contrast on labels */
+.label,
+.nav-link {
+  color: var(--text) !important;
+}
